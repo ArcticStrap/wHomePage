@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -22,5 +23,9 @@ func main() {
 		mainT.Execute(w, nil)
 	})
 
-	log.Fatal(http.ListenAndServe("127.0.0.1:6969", nil))
+	if os.Getenv("DEV") != "" {
+		log.Fatal(http.ListenAndServeTLS("127.0.0.1:6969", "certs/cert.pem", "certs/key.pem", nil))
+	} else {
+		log.Fatal(http.ListenAndServe("127.0.0.1:6969", nil))
+	}
 }
